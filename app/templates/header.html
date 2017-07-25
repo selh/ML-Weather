@@ -1,0 +1,24 @@
+<!DOCTYPE HTML>
+{%block head%}
+<head>
+  <title> Weather Predictor </title>
+  {{ dropzone.load() }}
+  {{ dropzone.style('border: 2px dashed skyblue; margin: 20%; min-height: 400px; opacity:0.5;') }}
+
+  {%block navbar%}
+  <div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <div class="navbar-brand">Weather Predictor</div>
+      </div>
+      <ul class="nav navbar-nav">
+        <li><a href="/"> Home </a></li>
+        <li><a href="/index"> Index </a></li>
+        <li><a href="#"> Example 3</a></li>
+      </ul>
+    </div>
+  </div>
+  {%endblock%}
+
+</head>
+{%endblock%}
