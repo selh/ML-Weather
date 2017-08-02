@@ -1,19 +1,24 @@
 <!DOCTYPE HTML>
 <html>
-
-
 {% extends "bootstrap/base.html" %}
 {% include "header.html" %}
 
+{% block scripts %}
 
+{% endblock %}
 
 {% block body %}
-<body style="background-color:lavender;">
+<body id="background">
 
-  <div class="middle">
+  <div id="middle">
     {{ dropzone.create(action_view='upload') }}
   </div>
 
 </body>
 {% endblock %}
+
+
 </html>
+
+
+

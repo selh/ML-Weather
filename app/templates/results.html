@@ -1,0 +1,28 @@
+<!DOCTYPE HTML>
+<html>
+  {%extends "bootstrap/base.html"%}
+  {% include "header.html" %}
+
+  {%block body%}
+  <body id="predict">
+  <link rel="stylesheet" href="static/result.css">
+
+
+    <div id="middle">
+      <div style="padding: 2em;">
+      <p style="padding: 1em; font-size: 15px; text-align: center;">Original Image</p>
+        <img src="" id="image" style="left:20%; border:2px solid white; border-radius:3px;">
+      </div>
+    </div>
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+    <script>
+      $(document).ready(function(){
+        document.getElementById("image").src = sessionStorage.getItem("img");
+      });
+    </script>
+  </body>
+  {%endblock%}
+</html>
+
+

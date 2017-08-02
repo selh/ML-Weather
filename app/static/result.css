@@ -1,0 +1,25 @@
+#predict{
+  background-color: #EFEFEF;
+}
+
+#middle{
+  background-color: #6D7993; 
+  position: absolute; 
+  margin-top: 10%; 
+  left: 25%; 
+  height: 100%; 
+  width: 50%; 
+  border-radius: 6px;
+}
+
+#image{
+  left: 20;
+  border: 1em white;
+}
+
+#title{
+  padding: 1em; 
+  font-size: 15px; 
+  text-align: center;
+
+}

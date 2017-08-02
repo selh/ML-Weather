@@ -1,15 +1,86 @@
 <!DOCTYPE HTML>
 {%block head%}
 <head>
-  <title> Weather Predictor </title>
-  {{ dropzone.load() }}
-  {{ dropzone.style('border: 2px dashed skyblue; margin: 20%; min-height: 400px; opacity:0.5;') }}
+  <title> What's the Weather? </title>
+
+  {%block scripts%}
+
+  <link rel="stylesheet" href="//cdn.bootcss.com/dropzone/5.1.1/min/dropzone.min.css" type="text/css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <link rel="stylesheet" href="static/styles.css">
+  <script src="//cdn.bootcss.com/dropzone/5.1.1/min/dropzone.min.js"></script>
+  <script>
+      //custom dropzone load options and javascript
+      Dropzone.options.myDropzone = {
+      init: function() {
+
+        var submitButton = Dropzone.createElement("<a href={{url_for('prediction')}} id='submit' class='btn btn-default' style='position:absolute; top:30em; left: 47%; border-radius:4px;'>Submit</a>");
+
+        submitButton.addEventListener("click", function() {
+            myDropzone.processQueue(); 
+        });
+        document.getElementById("myDropzone").appendChild(submitButton);
+
+        this.on("addedfile", function(file) { 
+
+          var removeButton = Dropzone.createElement("<button type='button' class='btn btn-danger'><span class='glyphicon glyphicon-remove'></span> Remove </button>");
+          // Capture the Dropzone instance as closure.
+          var _this = this;
+
+          // Listen to the click eventglyphicon glyphicon-remove
+          removeButton.addEventListener("click", function(e) {
+            // Make sure the button click doesn't submit the form:
+            e.preventDefault();
+            e.stopPropagation();
+
+            // Remove the file preview.
+            _this.removeFile(file);
+          });
+          // Add the button to the file preview element.
+          file.previewElement.appendChild(removeButton);
+        });
+
+        //for instant redirect
+        // this.on("success", function () {
+        //   if (this.getUploadingFiles().length === 0 && this.getQueuedFiles().length === 0) {
+        //       window.location= "/prediction";
+        //   }
+        // });
+
+      },
+      paramName: "file", // The name that will be used to transfer the file
+      maxFilesize: 3, // MB
+      acceptedFiles: "image/*",
+      maxFiles: 1,
+      dictDefaultMessage: "Drag and drop image of English Bay here, or click to select from files",
+      dictFallbackMessage: "Drag and drop image here, or click to select from files",
+      dictInvalidFileType: "Invalid File type",
+      dictFileTooBig: "File exceeds maximum allowable size of 3MB",
+      dictResponseError: "An error occured",
+      dictMaxFilesExceeded: "You may only upload one image file",
+      accept: function(file, done){
+        reader = new FileReader();
+        reader.onload = handleReaderLoad;
+        reader.readAsDataURL(file);
+        function handleReaderLoad(evt) {
+            sessionStorage.setItem("img", evt.target.result);
+        }
+        done();
+      },
+    };
+
+
+
+  </script>
+  {%endblock%}
+  
+  {{ dropzone.style('border: 2px dashed #FF3B3F; border-radius:10px; margin: 10%; min-height: 400px; background-color:#F4F4F4;') }}
 
   {%block navbar%}
-  <div class="navbar navbar-inverse navbar-fixed-top">
+  <div class="navbar navbar-default navbar-fixed-top">
     <div class="container-fluid">
       <div class="navbar-header">
-        <div class="navbar-brand">Weather Predictor</div>
+        <div class="navbar-brand"><span class="glyphicon glyphicon-sunglasses"></span></div>
       </div>
       <ul class="nav navbar-nav">
         <li><a href="/"> Home </a></li>
