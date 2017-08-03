@@ -1,10 +1,11 @@
-from flask import Flask, render_template, request, flash, url_for, redirect
+from flask import Flask, render_template, request, flash, url_for
 from werkzeug.utils import secure_filename
-from base64 import b64encode
+from app.preprocess import cv_equalize
 from scipy.misc import imread
+#from base64 import b64encode
 from app import app
-import numpy as np
 import pandas as pd
+import numpy as np
 import pickle
 import re
 import os
@@ -12,7 +13,7 @@ import os
 
 ALLOWED_EXTENSIONS = set(['png', 'jpg'])
 filename = secure_filename("tmp.jpg")
-model_path = os.path.join("app/static", "weatherml.pkl")
+model_path = os.path.join("app/model", "weatherml.pkl")
 
 
 @app.route('/')
@@ -36,14 +37,14 @@ def dataFrame2Array(images, train_set):
 @app.route('/prediction')
 def prediction():
 
+  image_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
   image_data = pd.DataFrame(columns=("image", "name"))
   X_test  = np.zeros((1,49152), dtype=np.float32)
 
-  image = imread(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-  if len(image.shape) >= 3:
-    image_data.loc[0] = [imread(os.path.join(app.config['UPLOAD_FOLDER'], filename), flatten=True).ravel(), filename]
-  else:
-    image_data.loc[0] = [imread(os.path.join(app.config['UPLOAD_FOLDER'], filename)).ravel(), filename]
+  cv_equalize(image_path)
+
+  image = imread(image_path)
+  image_data.loc[0] = [imread(image_path).ravel(), filename]
 
   dataFrame2Array(X_test, image_data)
   
@@ -53,7 +54,7 @@ def prediction():
   prediction = pkl_model.predict(X_test)
 
   #delete file from tmp directory when done
-  os.remove(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+  #os.remove(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
   return render_template('results.html', prediction=prediction[0])
 
