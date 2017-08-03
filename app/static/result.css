@@ -5,7 +5,7 @@
 #middle{
   background-color: #6D7993; 
   position: absolute; 
-  margin-top: 10%; 
+  margin-top: 5%; 
   left: 25%; 
   height: 100%; 
   width: 50%; 
@@ -13,7 +13,7 @@
 }
 
 #image{
-  left: 20;
+  left: 40%;
   border: 1em white;
 }
 
@@ -21,5 +21,12 @@
   padding: 1em; 
   font-size: 15px; 
   text-align: center;
+  color:white;
+}
 
+#text{
+  padding: 10em; 
+  margin-top: 10em;
+  position: absolute;
+  display: list-item;
 }

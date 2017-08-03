@@ -12,7 +12,7 @@ import os
 
 ALLOWED_EXTENSIONS = set(['png', 'jpg'])
 filename = secure_filename("tmp.jpg")
-model_path = os.path.join(app.config['UPLOAD_FOLDER'], "weatherml.plk")
+model_path = os.path.join("app/static", "weatherml.pkl")
 
 
 @app.route('/')
@@ -37,19 +37,25 @@ def dataFrame2Array(images, train_set):
 def prediction():
 
   image_data = pd.DataFrame(columns=("image", "name"))
-  image_data.loc[0] = [imread(os.path.join(app.config['UPLOAD_FOLDER'], filename), flatten=True).ravel(), filename]
   X_test  = np.zeros((1,49152), dtype=np.float32)
+
+  image = imread(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+  if len(image.shape) >= 3:
+    image_data.loc[0] = [imread(os.path.join(app.config['UPLOAD_FOLDER'], filename), flatten=True).ravel(), filename]
+  else:
+    image_data.loc[0] = [imread(os.path.join(app.config['UPLOAD_FOLDER'], filename)).ravel(), filename]
 
   dataFrame2Array(X_test, image_data)
   
-  pkl_model = load(model_path)
-  prediction = pkl_model.predict(X_test)
+  with open(model_path, 'rb') as pk:
+    pkl_model = pickle.load(pk)
 
+  prediction = pkl_model.predict(X_test)
 
   #delete file from tmp directory when done
   os.remove(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
-  return render_template('results.html', prediction=prediction)
+  return render_template('results.html', prediction=prediction[0])
 
 
 
