@@ -28,5 +28,5 @@
   padding: 10em; 
   margin-top: 10em;
   position: absolute;
-  display: list-item;
+  display: block;
 }
