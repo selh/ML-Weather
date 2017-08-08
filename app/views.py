@@ -35,6 +35,31 @@ def weather():
 def models():
   return render_template('ClassifierComparisons.html')
 
+@app.route('/sample')
+def sample():
+
+  image_path = os.path.join(app.config['SAMPLE_IMGS'], 'sample2.jpg')
+  image_data = pd.DataFrame(columns=("image", "name"))
+  X_test  = np.zeros((1,49152), dtype=np.float32)
+
+  image = imread(image_path)
+  image_data.loc[0] = [imread(image_path).ravel(), filename]
+
+  dataFrame2Array(X_test, image_data)
+  
+  with open(weather_path, 'rb') as weatherpk:
+    weather_model = pickle.load(weatherpk)
+
+  with open(time_path, 'rb') as timepk:
+    time_model = pickle.load(timepk)
+
+  weather_prediction = weather_model.predict(X_test)
+  time_prediction = time_model.predict(X_test)
+
+  return render_template('sample_result.html', 
+                          weather_prediction=weather_prediction[0],
+                          time_prediction=time_prediction[0])
+
 #Takes the original weather data loaded as Dataframe and converts to ML friendly format
 def dataFrame2Array(images, train_set):
   # reshape to (_,49152) (192x256 image to 1-d)
@@ -44,6 +69,7 @@ def dataFrame2Array(images, train_set):
 
 @app.route('/prediction')
 def prediction():
+
 
   image_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
   image_data = pd.DataFrame(columns=("image", "name"))

@@ -1,0 +1,34 @@
+<!DOCTYPE HTML>
+<html>
+  {%extends "bootstrap/base.html"%}
+  {% include "header.html" %}
+
+  {%block body%}
+  <body id="predict">
+  <link rel="stylesheet" href="static/result.css">
+
+
+    <div id="middle">
+
+      <div style="padding: 2em;">
+        <p style="padding: 1em; font-size: 20px; text-align: center; color:white;">Original Image</p>
+
+        <div style="display: block;"><img src="{{ url_for('static', filename='sample2.jpg') }}" id="image" style="left:50%; border:2px solid white; border-radius:3px; display: block; margin: 0 auto; text-align: center;">
+        </div>
+
+      </div>
+
+      <div id="text" style="left: 20%;">
+        <p style="text-align: center; margin:0 auto; color:white; font-size: 18px;">Estimated weather condition: {{weather_prediction}}</p>
+
+        <p style="text-align: center; margin:0 auto; color:white; font-size: 18px;">Estimated time of day: {{time_prediction}}</p>
+      </div>
+
+
+    </div> 
+
+  </body>
+  {%endblock%}
+</html>
+
+
