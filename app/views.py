@@ -13,7 +13,9 @@ import os
 
 ALLOWED_EXTENSIONS = set(['png', 'jpg'])
 filename = secure_filename("tmp.jpg")
-model_path = os.path.join("app/model", "weatherml.pkl")
+weather_path = os.path.join("app/model", "weatherml.pkl")
+time_path = os.path.join("app/model", "timeofday.pkl")
+
 
 
 @app.route('/')
@@ -21,11 +23,17 @@ def home():
   return render_template('home.html')
 
 
-@app.route('/index')
+@app.route('/notebooks')
 def index():
   return render_template('index.html')
 
+@app.route('/weather')
+def weather():
+  return render_template('WeatherTrends.html')
 
+@app.route('/models')
+def models():
+  return render_template('ClassifierComparisons.html')
 
 #Takes the original weather data loaded as Dataframe and converts to ML friendly format
 def dataFrame2Array(images, train_set):
@@ -48,15 +56,21 @@ def prediction():
 
   dataFrame2Array(X_test, image_data)
   
-  with open(model_path, 'rb') as pk:
-    pkl_model = pickle.load(pk)
+  with open(weather_path, 'rb') as weatherpk:
+    weather_model = pickle.load(weatherpk)
 
-  prediction = pkl_model.predict(X_test)
+  with open(time_path, 'rb') as timepk:
+    time_model = pickle.load(timepk)
+
+  weather_prediction = weather_model.predict(X_test)
+  time_prediction = time_model.predict(X_test)
 
   #delete file from tmp directory when done
-  #os.remove(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+  os.remove(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
-  return render_template('results.html', prediction=prediction[0])
+  return render_template('results.html', 
+                          weather_prediction=weather_prediction[0],
+                          time_prediction=time_prediction[0])
 
 
 

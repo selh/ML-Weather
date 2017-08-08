@@ -4,9 +4,10 @@
   <title> What's the Weather? </title>
 
   {%block scripts%}
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
   <link rel="stylesheet" href="//cdn.bootcss.com/dropzone/5.1.1/min/dropzone.min.css" type="text/css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <link rel="stylesheet" href="static/styles.css">
   <script src="//cdn.bootcss.com/dropzone/5.1.1/min/dropzone.min.js"></script>
   <script>
@@ -14,10 +15,13 @@
       Dropzone.options.myDropzone = {
       init: function() {
 
-        var submitButton = Dropzone.createElement("<a href={{url_for('prediction')}} id='submit' class='btn btn-default' style='position:absolute; top:30em; left: 47%; border-radius:4px;'>Submit</a>");
-
+        var submitButton = Dropzone.createElement("<a href={{url_for('prediction')}} id='submit-btn' class='btn btn-default' style='position:absolute; top:50%; left: 47%; border-radius:4px;'>Submit</a>");
+        // var submitButton = Dropzone.createElement("<button id= 'submit-btn' class='btn btn-default' disabled style='position:absolute; top:50%; left: 47%; border-radius:4px;'>Submit</button>");
+    
         submitButton.addEventListener("click", function() {
+          //if (!$('#submit-btn').is(':disabled')){
             myDropzone.processQueue(); 
+          //}
         });
         document.getElementById("myDropzone").appendChild(submitButton);
 
@@ -35,9 +39,12 @@
 
             // Remove the file preview.
             _this.removeFile(file);
+            //$('#submit-btn').prop('disabled', true);
           });
           // Add the button to the file preview element.
           file.previewElement.appendChild(removeButton);
+          //$('#submit-btn').prop('disabled', false);
+
         });
 
         //for instant redirect
@@ -69,7 +76,9 @@
       },
     };
 
-
+    $(document).ready(function(){
+        $('.dropdown-toggle').dropdown()
+    });
 
   </script>
   {%endblock%}
@@ -84,8 +93,15 @@
       </div>
       <ul class="nav navbar-nav">
         <li><a href="/"> Home </a></li>
-        <li><a href="/index"> Index </a></li>
-        <li><a href="#"> Example 3</a></li>
+        <li class="dropdown">
+          <a href class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Notebooks 
+          <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="/weather">Weather Trends</a></li>
+            <li><a href="/models">Model Comparison</a></li>
+          </ul>
+        </li>
+    
       </ul>
     </div>
   </div>
